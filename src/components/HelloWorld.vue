@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <button @click="loginClick">
+    <!-- <button @click="loginClick">
       Login
     </button>
     <button @click="logoutClick">
@@ -11,25 +11,31 @@
     <div>
       <br />
       User Info: {{ this.userInfo }}
-    </div>
+    </div> -->
+    <Login />
   </div>
 </template>
 
 <script>
-import userInfo from '../app/userInfo';
+import Login from './Login.vue';
 import axios from 'axios'
 
 export default {
   name: 'HelloWorld',
+  components:{
+    Login
+  },
   data() {
     return {
       msg: 'GGI Auth Flow',
       auth2: "",
-      code: '',
-      userInfo: userInfo.state.cognitoInfo
+      code: ''
     }
   },
   methods: {
+    differentFlow(){
+      console.log("Different flow")
+    },
     getQueryParams() {
       this.auth2 = this.$route.query.code
       console.log(this.auth2)
@@ -61,6 +67,9 @@ export default {
             { headers }
           ).then((response) => {
             console.log(response)
+            this.userInfo = response.data;
+            console.log("Access token: " + response.data.access_token)
+            console.log("Refresh token: " + response.data.refresh_token)
           }).catch((error) => {
             console.log(error)
           })
